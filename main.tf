@@ -79,16 +79,40 @@ resource "aws_route_table_association" "name" {
     route_table_id = aws_route_table.CICD-RT.id
   
 }
-#create an ec2 instance
-resource "aws_instance" "Jenkins" {
+#create ubuntu instances
+resource "aws_instance" "master" {
   ami           = var.ami[0]
-  instance_type = var.instance
+  instance_type = var.instance[0]
   key_name = "i2bk"
   vpc_security_group_ids = [aws_security_group.myCICD-SG.id]
   subnet_id = aws_subnet.CICD_Pub_Sub_A.id
   associate_public_ip_address = true
   user_data = file("./Jenkinsinstallation.sh")
   tags={
-    Name ="Jenkins-server"
+    Name ="master"
+  }
+}
+resource "aws_instance" "node1" {
+  ami           = var.ami[0]
+  instance_type = var.instance[1]
+  key_name = "i2bk"
+  vpc_security_group_ids = [aws_security_group.myCICD-SG.id]
+  subnet_id = aws_subnet.CICD_Pub_Sub_A.id
+  associate_public_ip_address = true
+  #user_data = file("./Jenkinsinstallation.sh")
+  tags={
+    Name ="node1"
+  }
+}
+resource "aws_instance" "node2" {
+  ami           = var.ami[0]
+  instance_type = var.instance[1]
+  key_name = "i2bk"
+  vpc_security_group_ids = [aws_security_group.myCICD-SG.id]
+  subnet_id = aws_subnet.CICD_Pub_Sub_A.id
+  associate_public_ip_address = true
+  #user_data = file("./Jenkinsinstallation.sh")
+  tags={
+    Name ="node2"
   }
 }
